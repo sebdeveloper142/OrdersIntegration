@@ -11,24 +11,8 @@
     "policyXMLSasToken": {
       "value": "true"
     },
-    "namedValues": {
-      "value": {
-        "rootManageSharedAccessKey": "[parameters('namedValues').RootManageSharedAccessKey]",
-        "sendListenToken": "[parameters('namedValues').SendListenToken]",
-        "sendListenTokenOut": "[parameters('namedValues').SendListenTokenOut]"
-      }
-    },
-    "namedValueKeyVaultSecrets": {
-      "value": {}
-    },
-    "serviceUrl": {
-      "value": {
-        "utilityapimessaging": null
-      }
-    },
-    "loggerResourceId": {
-      "value": {}
-    }
+
+
   },
   "resources": []
 }
