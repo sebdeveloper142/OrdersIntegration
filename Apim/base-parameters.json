@@ -1,0 +1,34 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apimServiceName": {
+      "value": "B2BApiGateway"
+    },
+    "policyXMLBaseUrl": {
+      "value": ""
+    },
+    "policyXMLSasToken": {
+      "value": "true"
+    },
+    "namedValues": {
+      "value": {
+        "rootManageSharedAccessKey": "[parameters('namedValues').RootManageSharedAccessKey]",
+        "sendListenToken": "[parameters('namedValues').SendListenToken]",
+        "sendListenTokenOut": "[parameters('namedValues').SendListenTokenOut]"
+      }
+    },
+    "namedValueKeyVaultSecrets": {
+      "value": {}
+    },
+    "serviceUrl": {
+      "value": {
+        "utilityapimessaging": null
+      }
+    },
+    "loggerResourceId": {
+      "value": {}
+    }
+  },
+  "resources": []
+}

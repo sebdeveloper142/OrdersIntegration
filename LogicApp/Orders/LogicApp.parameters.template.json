@@ -1,0 +1,35 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "logicAppName": {
+      "value": "DEV-CICD-DemoApp"
+    },
+    "arm_serviceBus_Connection_Name": {
+      "value": "servicebus"
+    },
+    "arm_serviceBus_Connection_DisplayName": {
+      "value": "CN-IT-EAI-SBDemoConn"
+    },
+    "arm_serviceBus_connectionString": {
+      "value": "__SBConnectionString__"
+    },
+    "arm_LA_Initialstate": {
+      "value": "__LA_InitialState__"
+
+    },
+    "arm_serviceBus_Out_Connection_Name": {
+      "value": "servicebus_2"
+    },
+    "arm_serviceBus_Out_Connection_DisplayName": {
+      "value": "CN-IT-EAI-2-SBDemoConn"
+    },
+    "arm_serviceBus_Out_connectionString": {
+      "value": "__SBConnectionStringOut__"
+    },
+
+    "x12_1_integrationAccountId": {
+      "value": "__IntegrationAccount__"
+    }
+  }
+}

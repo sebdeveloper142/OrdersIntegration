@@ -1,0 +1,295 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "logicAppName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "metadata": {
+        "description": "Name of the Logic App."
+      }
+    },
+    "logicAppLocation": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "allowedValues": [
+        "[resourceGroup().location]",
+        "eastasia",
+        "southeastasia",
+        "centralus",
+        "eastus",
+        "eastus2",
+        "westus",
+        "northcentralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "japanwest",
+        "japaneast",
+        "brazilsouth",
+        "australiaeast",
+        "australiasoutheast",
+        "southindia",
+        "centralindia",
+        "westindia",
+        "canadacentral",
+        "canadaeast",
+        "uksouth",
+        "ukwest",
+        "westcentralus",
+        "westus2",
+        "koreacentral",
+        "koreasouth",
+        "francecentral",
+        "francesouth",
+        "uaecentral",
+        "uaenorth",
+        "southafricanorth",
+        "southafricawest",
+        "switzerlandnorth",
+        "switzerlandwest",
+        "germanynorth",
+        "germanywestcentral",
+        "norwaywest",
+        "norwayeast",
+        "brazilsoutheast",
+        "westus3"
+      ],
+      "metadata": {
+        "description": "Location of the Logic App."
+      }
+    },
+    "arm_serviceBus_Connection_Name": {
+      "type": "string",
+      "defaultValue": "servicebus-1"
+    },
+    "arm_serviceBus_Connection_DisplayName": {
+      "type": "string",
+      "defaultValue": "B2BMessages"
+    },
+    "arm_serviceBus_connectionString": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Azure Service Bus Connection String"
+      }
+    },
+    "arm_LA_Initialstate": {
+      "type": "string",
+      "defaultValue": "Disabled"
+    },
+    "arm_serviceBus_Out_Connection_Name": {
+      "type": "string",
+      "defaultValue": "servicebus-9"
+    },
+    "arm_serviceBus_Out_Connection_DisplayName": {
+      "type": "string",
+      "defaultValue": "orders_in"
+    },
+    "arm_serviceBus_Out_connectionString": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Azure Service Bus Connection String"
+      }
+    },
+    "x12_1_Connection_Name": {
+      "type": "string",
+      "defaultValue": "x12"
+    },
+    "x12_1_Connection_DisplayName": {
+      "type": "string",
+      "defaultValue": "decode_x12_orders"
+    },
+    "x12_1_integrationAccountId": {
+      "type": "string",
+      "metadata": {
+        "description": "Integration Account ID"
+      },
+      "defaultValue": "/subscriptions/c091862c-e1ab-44f1-876b-e55133fadc1a/resourceGroups/SebsB2B/providers/Microsoft.Logic/integrationAccounts/SebsB2B"
+    }
+  },
+  "variables": {
+    "singleQuote": "'"
+  },
+  "resources": [
+    {
+      "name": "[parameters('logicAppName')]",
+      "type": "Microsoft.Logic/workflows",
+      "location": "[parameters('logicAppLocation')]",
+      "tags": {
+        "displayName": "LogicApp"
+      },
+      "apiVersion": "2016-06-01",
+      "properties": {
+        "integrationAccount": {
+          "id": "[parameters('x12_1_integrationAccountId')]"
+        },
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "actions": {
+            "For_each": {
+              "type": "Foreach",
+              "foreach": "@body('Decode_X12_message')?['GoodMessages']",
+              "actions": {
+                "Transform_XML": {
+                  "type": "Xslt",
+                  "inputs": {
+                    "content": "@{xml(base64ToBinary(item()?['Payload']))}",
+                    "integrationAccount": {
+                      "map": {
+                        "name": "xslt_edi_to_xml"
+                      }
+                    }
+                  },
+                  "runAfter": {}
+                },
+                "Send_message_2": {
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['servicebus_4']['connectionId']"
+                      }
+                    },
+                    "method": "post",
+                    "body": {
+                      "SessionId": "@triggerBody()?['MessageId']",
+                      "ContentData": "@{base64(body('Transform_XML'))}"
+                    },
+                    "path": "/@{encodeURIComponent(encodeURIComponent('orders_out'))}/messages"
+                  },
+                  "runAfter": {
+                    "Transform_XML": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "runAfter": {
+                "Decode_X12_message": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Decode_X12_message": {
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['x12']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "body": "@base64ToBinary(triggerBody()?['ContentData'])",
+                "path": "/decode"
+              },
+              "runAfter": {}
+            }
+          },
+          "parameters": {
+            "$connections": {
+              "defaultValue": {},
+              "type": "Object"
+            }
+          },
+          "triggers": {
+            "When_a_message_is_received_in_a_queue_(auto-complete)": {
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['servicebus']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/@{encodeURIComponent(encodeURIComponent('orders_in'))}/messages/head",
+                "queries": {
+                  "queueType": "Main"
+                }
+              },
+              "recurrence": {
+                "frequency": "Minute",
+                "interval": 3
+              }
+            }
+          },
+          "contentVersion": "1.0.0.0",
+          "outputs": {}
+        },
+        "parameters": {
+          "$connections": {
+            "value": {
+              "servicebus_4": {
+                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'servicebus')]",
+                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('arm_serviceBus_Out_Connection_Name'))]",
+                "connectionName": "[parameters('arm_serviceBus_Out_Connection_Name')]"
+              },
+              "x12": {
+                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'x12')]",
+                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('x12_1_Connection_Name'))]",
+                "connectionName": "[parameters('x12_1_Connection_Name')]"
+              },
+              "servicebus": {
+                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'servicebus')]",
+                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('arm_serviceBus_Connection_Name'))]",
+                "connectionName": "[parameters('arm_serviceBus_Connection_Name')]"
+              }
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/connections', parameters('arm_serviceBus_Out_Connection_Name'))]",
+        "[resourceId('Microsoft.Web/connections', parameters('x12_1_Connection_Name'))]",
+        "[resourceId('Microsoft.Web/connections', parameters('arm_serviceBus_Connection_Name'))]"
+      ]
+    },
+    {
+      "type": "MICROSOFT.WEB/CONNECTIONS",
+      "apiVersion": "2018-07-01-preview",
+      "name": "[parameters('arm_serviceBus_Connection_Name')]",
+      "location": "[parameters('logicAppLocation')]",
+      "properties": {
+        "api": {
+          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'servicebus')]"
+        },
+        "displayName": "[parameters('arm_serviceBus_Connection_Name')]",
+        "parameterValues": {
+          "connectionString": "[parameters('arm_serviceBus_connectionString')]"
+        }
+      }
+    },
+    {
+      "type": "MICROSOFT.WEB/CONNECTIONS",
+      "apiVersion": "2018-07-01-preview",
+      "name": "[parameters('arm_serviceBus_Out_Connection_Name')]",
+      "location": "[parameters('logicAppLocation')]",
+      "properties": {
+        "api": {
+          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'servicebus')]"
+        },
+        "displayName": "[parameters('arm_serviceBus_Out_Connection_DisplayName')]",
+        "parameterValues": {
+          "connectionString": "[parameters('arm_serviceBus_Out_connectionString')]"
+        }
+      }
+    },
+    {
+      "type": "MICROSOFT.WEB/CONNECTIONS",
+      "apiVersion": "2018-07-01-preview",
+      "name": "[parameters('x12_1_Connection_Name')]",
+      "location": "[parameters('logicAppLocation')]",
+      "properties": {
+        "api": {
+          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'x12')]"
+        },
+        "displayName": "[parameters('x12_1_Connection_DisplayName')]",
+        "parameterValues": {
+          "integrationAccountId": "[parameters('x12_1_integrationAccountId')]",
+          "integrationAccountUrl": "[listCallbackURL(parameters('x12_1_integrationAccountId'), '2015-08-01-preview').value]"
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}

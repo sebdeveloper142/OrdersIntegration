@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apimServiceName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/products/apis",
+      "name": "[concat(parameters('apimServiceName'), '/starter/utility-api-messaging')]",
+      "properties": {
+        "displayName": "Starter",
+        "description": "Subscribers will be able to run 5 calls/minute up to a maximum of 100 calls/week.",
+        "subscriptionRequired": true,
+        "approvalRequired": false,
+        "state": "published"
+      }
+    }
+  ]
+}

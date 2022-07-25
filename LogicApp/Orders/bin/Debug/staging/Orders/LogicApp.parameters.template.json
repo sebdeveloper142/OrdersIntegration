@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+
+    "arm_serviceBus_Connection_Name": {
+      "value": "servicebus"
+    },
+    "arm_serviceBus_Connection_DisplayName": {
+      "value": "CN-IT-EAI-SBDemoConn"
+    },
+    "arm_serviceBus_connectionString": {
+      "value": "__SBConnectionString__"
+    },
+    "arm_LA_Initialstate": {
+       "value": "__LA_InitialState"
+
+    }
+
+
+
+  }
+}

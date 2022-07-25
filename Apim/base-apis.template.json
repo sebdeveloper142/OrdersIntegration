@@ -1,0 +1,116 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apimServiceName": {
+      "type": "string"
+    },
+    "policyXMLBaseUrl": {
+      "type": "string"
+    },
+    "policyXMLSasToken": {
+      "type": "string"
+    },
+    "serviceUrl": {
+      "type": "object"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis",
+      "name": "[concat(parameters('apimServiceName'), '/utility-api-messaging')]",
+      "dependsOn": [],
+      "properties": {
+        "description": "This serves as a reley between cliend and service bus",
+        "authenticationSettings": {
+          "subscriptionKeyRequired": false
+        },
+        "subscriptionKeyParameterNames": {
+          "header": "Ocp-Apim-Subscription-Key",
+          "query": "subscription-key"
+        },
+        "apiRevision": "1",
+        "isCurrent": true,
+        "subscriptionRequired": true,
+        "displayName": "Utility - API Messaging",
+        "serviceUrl": "[parameters('serviceUrl').utilityapimessaging]",
+        "path": "",
+        "protocols": [
+          "https"
+        ]
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/products/apis",
+      "name": "[concat(parameters('apimServiceName'), '/starter/utility-api-messaging')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apimServiceName'), 'utility-api-messaging')]"
+      ],
+      "properties": {
+        "displayName": "Starter",
+        "description": "Subscribers will be able to run 5 calls/minute up to a maximum of 100 calls/week.",
+        "subscriptionRequired": true,
+        "approvalRequired": false,
+        "state": "published"
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "name": "[concat(parameters('apimServiceName'), '/utility-api-messaging/service-bus-get-message')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apimServiceName'), 'utility-api-messaging')]"
+      ],
+      "properties": {
+        "displayName": "Service Bus - Get message",
+        "method": "DELETE",
+        "urlTemplate": "/servicebus/out",
+        "description": "Get message from queue",
+        "templateParameters": [],
+        "responses": []
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "name": "[concat(parameters('apimServiceName'), '/utility-api-messaging/service-bus-send-message')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apimServiceName'), 'utility-api-messaging')]"
+      ],
+      "properties": {
+        "displayName": "Service Bus - Send message",
+        "method": "POST",
+        "urlTemplate": "/servicebus/in",
+        "description": "",
+        "templateParameters": [],
+        "responses": []
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+      "name": "[concat(parameters('apimServiceName'), '/utility-api-messaging/service-bus-get-message/policy')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apimServiceName'), 'utility-api-messaging', 'service-bus-get-message')]"
+      ],
+      "properties": {
+        "value": "[concat(parameters('policyXMLBaseUrl'), 'utility-api-messaging-service-bus-get-message-operationPolicy.xml', parameters('policyXMLSasToken'))]",
+        "format": "rawxml-link"
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+      "name": "[concat(parameters('apimServiceName'), '/utility-api-messaging/service-bus-send-message/policy')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apimServiceName'), 'utility-api-messaging', 'service-bus-send-message')]"
+      ],
+      "properties": {
+        "value": "[concat(parameters('policyXMLBaseUrl'), 'utility-api-messaging-service-bus-send-message-operationPolicy.xml', parameters('policyXMLSasToken'))]",
+        "format": "rawxml-link"
+      }
+    }
+  ]
+}

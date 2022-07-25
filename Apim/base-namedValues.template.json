@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apimServiceName": {
+      "type": "string"
+    },
+    "namedValues": {
+      "type": "object"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/namedValues",
+      "name": "[concat(parameters('apimServiceName'), '/RootManageSharedAccessKey')]",
+      "originalName": "RootManageSharedAccessKey",
+      "properties": {
+        "tags": [],
+        "secret": true,
+        "displayName": "RootManageSharedAccessKey",
+        "value": "[parameters('namedValues').RootManageSharedAccessKey]"
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/namedValues",
+      "name": "[concat(parameters('apimServiceName'), '/SendListenToken')]",
+      "originalName": "SendListenToken",
+      "properties": {
+        "tags": [],
+        "secret": true,
+        "displayName": "SendListenToken",
+        "value": "[parameters('namedValues').SendListenToken]"
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/namedValues",
+      "name": "[concat(parameters('apimServiceName'), '/SendListenTokenOut')]",
+      "originalName": "SendListenTokenOut",
+      "properties": {
+        "tags": [],
+        "secret": true,
+        "displayName": "SendListenTokenOut",
+        "value": "[parameters('namedValues').SendListenTokenOut]"
+      }
+    }
+  ]
+}
