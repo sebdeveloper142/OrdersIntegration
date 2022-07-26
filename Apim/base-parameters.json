@@ -6,7 +6,7 @@
          "value":"B2BApiGateway"
       },
       "policyXMLBaseUrl":{
-         "value":"/policies/globalServicePolicy.xml"
+         "value":""
       },
       "policyXMLSasToken":{
          "value":"true"
