@@ -7,9 +7,6 @@
     },
     "policyXMLBaseUrl": {
       "type": "string"
-    },
-    "policyXMLSasToken": {
-      "type": "string"
     }
   },
   "resources": [
@@ -18,7 +15,7 @@
       "type": "Microsoft.ApiManagement/service/policies",
       "name": "[concat(parameters('apimServiceName'), '/policy')]",
       "properties": {
-        "value": "[concat(parameters('policyXMLBaseUrl'), 'globalServicePolicy.xml', parameters('policyXMLSasToken'))]",
+        "value": "[concat(parameters('policyXMLBaseUrl'), 'globalServicePolicy.xml')]",
         "format": "rawxml-link"
       }
     }
