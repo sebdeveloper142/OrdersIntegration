@@ -7,13 +7,6 @@
     },
     "policyXMLBaseUrl": {
       "value": "https://testr68.blob.core.windows.net/policies"
-    },
-    "namedValues": {
-      "value": {
-        "rootManageSharedAccessKey": "[parameters('namedValues').RootManageSharedAccessKey]",
-        "sendListenToken": "[parameters('namedValues').SendListenToken]",
-        "sendListenTokenOut": "[parameters('namedValues').SendListenTokenOut]"
-      }
     }
   },
   "resources": []
