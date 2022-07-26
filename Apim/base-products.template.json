@@ -7,6 +7,9 @@
     },
     "policyXMLBaseUrl": {
       "type": "string"
+    },
+    "policyXMLSasToken": {
+      "type": "string"
     }
   },
   "resources": [
@@ -129,7 +132,7 @@
         "[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'starter')]"
       ],
       "properties": {
-        "value": "[concat(parameters('policyXMLBaseUrl'), 'starter-productPolicy.xml')]",
+        "value": "[concat(parameters('policyXMLBaseUrl'), 'starter-productPolicy.xml', parameters('policyXMLSasToken'))]",
         "format": "rawxml-link"
       }
     }
