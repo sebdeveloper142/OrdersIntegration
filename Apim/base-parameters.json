@@ -6,7 +6,7 @@
       "value": "B2BApiGateway"
     },
     "policyXMLBaseUrl": {
-      "value": ""
+      "value": "https://testr68.blob.core.windows.net/policies"
     },
     "namedValues": {
       "value": {
@@ -14,17 +14,6 @@
         "sendListenToken": "[parameters('namedValues').SendListenToken]",
         "sendListenTokenOut": "[parameters('namedValues').SendListenTokenOut]"
       }
-    },
-    "namedValueKeyVaultSecrets": {
-      "value": {}
-    },
-    "serviceUrl": {
-      "value": {
-        "utilityapimessaging": null
-      }
-    },
-    "loggerResourceId": {
-      "value": {}
     }
   },
   "resources": []
