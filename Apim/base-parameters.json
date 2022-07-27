@@ -9,7 +9,7 @@
          "value":"https://testr68.blob.core.windows.net/policies"
       },
       "policyXMLSasToken":{
-         "value":"true"
+         "value":"sp=r&st=2022-07-27T21:11:09Z&se=2022-12-28T06:11:09Z&spr=https&sv=2021-06-08&sr=c&sig=ROQ3Dl5eglCZQTeSLqqxwjg1YO5k35yyWR8foLNNZt0%3D"
       }
    },
    "resources":[
