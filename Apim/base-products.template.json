@@ -1,140 +1,136 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "apimServiceName": {
-      "type": "string"
-    },
-    "policyXMLBaseUrl": {
-      "type": "string"
-    },
-    "policyXMLSasToken": {
-      "type": "string"
-    }
-  },
-  "resources": [
-    {
-      "apiVersion": "2021-08-01",
-      "type": "Microsoft.ApiManagement/service/products",
-      "name": "[concat(parameters('apimServiceName'), '/starter')]",
-      "properties": {
-        "description": "Subscribers will be able to run 5 calls/minute up to a maximum of 100 calls/week.",
-        "terms": "",
-        "subscriptionRequired": true,
-        "approvalRequired": false,
-        "subscriptionsLimit": 1,
-        "state": "published",
-        "displayName": "Starter"
-      }
-    },
-    {
-      "apiVersion": "2021-08-01",
-      "type": "Microsoft.ApiManagement/service/products",
-      "name": "[concat(parameters('apimServiceName'), '/unlimited')]",
-      "properties": {
-        "description": "Subscribers have completely unlimited access to the API. Administrator approval is required.",
-        "subscriptionRequired": true,
-        "approvalRequired": true,
-        "subscriptionsLimit": 1,
-        "state": "published",
-        "displayName": "Unlimited"
-      }
-    },
-    {
-      "apiVersion": "2021-08-01",
-      "type": "Microsoft.ApiManagement/service/products/groups",
-      "name": "[concat(parameters('apimServiceName'), '/starter/administrators')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'starter')]"
-      ],
-      "properties": {
-        "description": "Administrators is a built-in group containing the admin email account provided at the time of service creation. Its membership is managed by the system.",
-        "displayName": "Administrators",
-        "type": "system",
-        "builtIn": true
-      }
-    },
-    {
-      "apiVersion": "2021-08-01",
-      "type": "Microsoft.ApiManagement/service/products/groups",
-      "name": "[concat(parameters('apimServiceName'), '/starter/developers')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'starter')]"
-      ],
-      "properties": {
-        "description": "Developers is a built-in group. Its membership is managed by the system. Signed-in users fall into this group.",
-        "displayName": "Developers",
-        "type": "system",
-        "builtIn": true
-      }
-    },
-    {
-      "apiVersion": "2021-08-01",
-      "type": "Microsoft.ApiManagement/service/products/groups",
-      "name": "[concat(parameters('apimServiceName'), '/starter/guests')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'starter')]"
-      ],
-      "properties": {
-        "description": "Guests is a built-in group. Its membership is managed by the system. Unauthenticated users visiting the developer portal fall into this group.",
-        "displayName": "Guests",
-        "type": "system",
-        "builtIn": true
-      }
-    },
-    {
-      "apiVersion": "2021-08-01",
-      "type": "Microsoft.ApiManagement/service/products/groups",
-      "name": "[concat(parameters('apimServiceName'), '/unlimited/administrators')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'unlimited')]"
-      ],
-      "properties": {
-        "description": "Administrators is a built-in group containing the admin email account provided at the time of service creation. Its membership is managed by the system.",
-        "displayName": "Administrators",
-        "type": "system",
-        "builtIn": true
-      }
-    },
-    {
-      "apiVersion": "2021-08-01",
-      "type": "Microsoft.ApiManagement/service/products/groups",
-      "name": "[concat(parameters('apimServiceName'), '/unlimited/developers')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'unlimited')]"
-      ],
-      "properties": {
-        "description": "Developers is a built-in group. Its membership is managed by the system. Signed-in users fall into this group.",
-        "displayName": "Developers",
-        "type": "system",
-        "builtIn": true
-      }
-    },
-    {
-      "apiVersion": "2021-08-01",
-      "type": "Microsoft.ApiManagement/service/products/groups",
-      "name": "[concat(parameters('apimServiceName'), '/unlimited/guests')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'unlimited')]"
-      ],
-      "properties": {
-        "description": "Guests is a built-in group. Its membership is managed by the system. Unauthenticated users visiting the developer portal fall into this group.",
-        "displayName": "Guests",
-        "type": "system",
-        "builtIn": true
-      }
-    },
-    {
-      "apiVersion": "2021-08-01",
-      "type": "Microsoft.ApiManagement/service/products/policies",
-      "name": "[concat(parameters('apimServiceName'), '/starter/policy')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'starter')]"
-      ],
-      "properties": {
-        "value": "[concat(parameters('policyXMLBaseUrl'), 'starter-productPolicy.xml', parameters('policyXMLSasToken'))]",
-        "format": "rawxml-link"
-      }
-    }
-  ]
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"apimServiceName": {
+			"type": "string"
+		},
+		"policyXMLBaseUrl": {
+			"type": "string"
+		}
+	},
+	"resources": [
+		{
+			"apiVersion": "2021-08-01",
+			"type": "Microsoft.ApiManagement/service/products",
+			"name": "[concat(parameters('apimServiceName'), '/starter')]",
+			"properties": {
+				"description": "Subscribers will be able to run 5 calls/minute up to a maximum of 100 calls/week.",
+				"terms": "",
+				"subscriptionRequired": true,
+				"approvalRequired": false,
+				"subscriptionsLimit": 1,
+				"state": "published",
+				"displayName": "Starter"
+			}
+		},
+		{
+			"apiVersion": "2021-08-01",
+			"type": "Microsoft.ApiManagement/service/products",
+			"name": "[concat(parameters('apimServiceName'), '/unlimited')]",
+			"properties": {
+				"description": "Subscribers have completely unlimited access to the API. Administrator approval is required.",
+				"subscriptionRequired": true,
+				"approvalRequired": true,
+				"subscriptionsLimit": 1,
+				"state": "published",
+				"displayName": "Unlimited"
+			}
+		},
+		{
+			"apiVersion": "2021-08-01",
+			"type": "Microsoft.ApiManagement/service/products/groups",
+			"name": "[concat(parameters('apimServiceName'), '/starter/administrators')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'starter')]"
+			],
+			"properties": {
+				"description": "Administrators is a built-in group containing the admin email account provided at the time of service creation. Its membership is managed by the system.",
+				"displayName": "Administrators",
+				"type": "system",
+				"builtIn": true
+			}
+		},
+		{
+			"apiVersion": "2021-08-01",
+			"type": "Microsoft.ApiManagement/service/products/groups",
+			"name": "[concat(parameters('apimServiceName'), '/starter/developers')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'starter')]"
+			],
+			"properties": {
+				"description": "Developers is a built-in group. Its membership is managed by the system. Signed-in users fall into this group.",
+				"displayName": "Developers",
+				"type": "system",
+				"builtIn": true
+			}
+		},
+		{
+			"apiVersion": "2021-08-01",
+			"type": "Microsoft.ApiManagement/service/products/groups",
+			"name": "[concat(parameters('apimServiceName'), '/starter/guests')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'starter')]"
+			],
+			"properties": {
+				"description": "Guests is a built-in group. Its membership is managed by the system. Unauthenticated users visiting the developer portal fall into this group.",
+				"displayName": "Guests",
+				"type": "system",
+				"builtIn": true
+			}
+		},
+		{
+			"apiVersion": "2021-08-01",
+			"type": "Microsoft.ApiManagement/service/products/groups",
+			"name": "[concat(parameters('apimServiceName'), '/unlimited/administrators')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'unlimited')]"
+			],
+			"properties": {
+				"description": "Administrators is a built-in group containing the admin email account provided at the time of service creation. Its membership is managed by the system.",
+				"displayName": "Administrators",
+				"type": "system",
+				"builtIn": true
+			}
+		},
+		{
+			"apiVersion": "2021-08-01",
+			"type": "Microsoft.ApiManagement/service/products/groups",
+			"name": "[concat(parameters('apimServiceName'), '/unlimited/developers')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'unlimited')]"
+			],
+			"properties": {
+				"description": "Developers is a built-in group. Its membership is managed by the system. Signed-in users fall into this group.",
+				"displayName": "Developers",
+				"type": "system",
+				"builtIn": true
+			}
+		},
+		{
+			"apiVersion": "2021-08-01",
+			"type": "Microsoft.ApiManagement/service/products/groups",
+			"name": "[concat(parameters('apimServiceName'), '/unlimited/guests')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'unlimited')]"
+			],
+			"properties": {
+				"description": "Guests is a built-in group. Its membership is managed by the system. Unauthenticated users visiting the developer portal fall into this group.",
+				"displayName": "Guests",
+				"type": "system",
+				"builtIn": true
+			}
+		},
+		{
+			"apiVersion": "2021-08-01",
+			"type": "Microsoft.ApiManagement/service/products/policies",
+			"name": "[concat(parameters('apimServiceName'), '/starter/policy')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'starter')]"
+			],
+			"properties": {
+				"policyContent": "<policies>\r\n  <inbound>\r\n    <base />\r\n    <rate-limit calls=\"20\" renewal-period=\"60\" />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>"
+			}
+		}
+	]
 }
