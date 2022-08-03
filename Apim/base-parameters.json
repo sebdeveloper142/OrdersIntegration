@@ -4,12 +4,6 @@
    "parameters":{
       "apimServiceName":{
          "value":"B2BApiGateway"
-      },
-      "policyXMLBaseUrl":{
-         "value":"https://testr68.blob.core.windows.net/policies"
-      },
-      "policyXMLSasToken":{
-         "value":"true"
       }
    },
    "resources":[
