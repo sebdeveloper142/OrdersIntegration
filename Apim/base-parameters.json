@@ -5,7 +5,7 @@
 		"apimServiceName": {
 			"value": "B2BApiGateway"
 		},
-		"NamedValues": {
+		"namedValues": {
 			"value": {
 				"SendListenTokenOut": "__NamedValue1__",
 				"SendListenTokenOut": "__NamedValue2__"
