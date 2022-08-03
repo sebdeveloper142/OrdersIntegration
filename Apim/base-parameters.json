@@ -1,18 +1,16 @@
 {
-   "$schema":"https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-   "contentVersion":"1.0.0.0",
-   "parameters":{
-      "apimServiceName":{
-         "value":"B2BApiGateway"
-      },
-	  "NamedValues":{
-		  "value": 
-		  "SendListenTokenOut": "__NamedValue1__",
-		  "SendListenTokenOut": "__NamedValue2__"
-		  
-		  }
-   },
-   "resources":[
-      
-   ]
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"apimServiceName": {
+			"value": "B2BApiGateway"
+		},
+		"NamedValues": {
+			"value": {
+				"SendListenTokenOut": "__NamedValue1__",
+				"SendListenTokenOut": "__NamedValue2__"
+			}
+		}
+	},
+	"resources": []
 }
