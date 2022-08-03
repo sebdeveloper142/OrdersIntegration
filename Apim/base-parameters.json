@@ -4,12 +4,6 @@
 	"parameters": {
 		"apimServiceName": {
 			"value": "B2BApiGateway"
-		},
-		"namedValues": {
-			"value": {
-				"SendListenTokenOut": "__NamedValue1__",
-				"SendListenTokenOut": "__NamedValue2__"
-			}
 		}
 	},
 	"resources": []
