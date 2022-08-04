@@ -6,7 +6,7 @@
 			"type": "string"
 		},
 		"serviceUrl": {
-			"type": "object"
+			"type": "string"
 		}
 	},
 	"resources": [
