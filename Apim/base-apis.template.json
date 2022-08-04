@@ -4,37 +4,10 @@
 	"parameters": {
 		"apimServiceName": {
 			"type": "string"
-		},
-		"serviceUrl": {
-			"type": "string",
-			"defaultValue": "VNet1"
+		}aultValue": "VNet1"
 	},
 	"resources": [
-		{
-			"apiVersion": "2021-08-01",
-			"type": "Microsoft.ApiManagement/service/apis",
-			"name": "[concat(parameters('apimServiceName'), '/utility-api-messaging')]",
-			"dependsOn": [],
-			"properties": {
-				"description": "This serves as a reley between cliend and service bus",
-				"authenticationSettings": {
-					"subscriptionKeyRequired": false
-				},
-				"subscriptionKeyParameterNames": {
-					"header": "Ocp-Apim-Subscription-Key",
-					"query": "subscription-key"
-				},
-				"apiRevision": "1",
-				"isCurrent": true,
-				"subscriptionRequired": true,
-				"displayName": "Utility - API Messaging",
-				"serviceUrl": "[parameters('serviceUrl').utilityapimessaging]",
-				"path": "",
-				"protocols": [
-					"https"
-				]
-			}
-		},
+	
 		{
 			"apiVersion": "2021-08-01",
 			"type": "Microsoft.ApiManagement/service/products/apis",
