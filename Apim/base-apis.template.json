@@ -6,9 +6,7 @@
 			"type": "string"
 		},
 		"serviceUrl": {
-			"type": "object",
-			"defaultValue": {
-			"utilityapimessaging": "test"
+			"type": "object"
 		}
 	},
 	"resources": [
