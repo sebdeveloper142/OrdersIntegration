@@ -4,7 +4,10 @@
 	"parameters": {
 		"apimServiceName": {
 			"type": "string"
-		}
+		},
+		"serviceUrl": {
+			"type": "string",
+			"defaultValue": "VNet1"
 	},
 	"resources": [
 	
@@ -78,4 +81,5 @@
 			}
 		}
 	]
+}
 }
