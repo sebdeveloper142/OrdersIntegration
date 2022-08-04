@@ -6,7 +6,7 @@
 			"type": "string"
 		},
 		"serviceUrl": {
-			"type": "string",
+			"type": "object",
 			"defaultValue": {
 			"utilityapimessaging": "test"
 		}
