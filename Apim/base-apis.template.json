@@ -6,7 +6,9 @@
 			"type": "string"
 		},
 		"serviceUrl": {
-			"type": "string"
+			"type": "object",
+			"defaultValue": {
+			"utilityapimessaging": "VNet1"
 		}
 	},
 	"resources": [
