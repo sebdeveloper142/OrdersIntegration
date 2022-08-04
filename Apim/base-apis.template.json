@@ -5,9 +5,6 @@
 		"apimServiceName": {
 			"type": "string"
 		},
-		"policyXMLBaseUrl": {
-			"type": "string"
-		},
 		"serviceUrl": {
 			"type": "object"
 		}
@@ -93,8 +90,7 @@
 				"[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apimServiceName'), 'utility-api-messaging', 'service-bus-get-message')]"
 			],
 			"properties": {
-				"value": "[concat(parameters('policyXMLBaseUrl'), 'utility-api-messaging-service-bus-get-message-operationPolicy.xml')]",
-				"format": "rawxml-link"
+				"policyContent": "<policies>    <inbound>        <base />        <set-method>DELETE</set-method>        <set-backend-service base-url='https://B2BMessages.servicebus.windows.net/orders_out/messages/head' />        <rewrite-uri template='/' />        <set-header name='Content-Type' exists-action='override'>            <value>vnd.microsoft.servicebus.yml</value>        </set-header>        <set-header name='Authorization' exists-action='override'>            <value>{{RootManageSharedAccessKey}}</value>        </set-header>    </inbound>    <backend>        <base />    </backend>    <outbound>        <base />    </outbound>    <on-error>        <base />    </on-error> </policies>"
 			}
 		},
 		{
