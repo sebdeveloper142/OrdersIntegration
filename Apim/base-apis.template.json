@@ -4,7 +4,7 @@
 	"parameters": {
 		"apimServiceName": {
 			"type": "string"
-		}aultValue": "VNet1"
+		}
 	},
 	"resources": [
 	
@@ -78,5 +78,4 @@
 			}
 		}
 	]
-}
 }
