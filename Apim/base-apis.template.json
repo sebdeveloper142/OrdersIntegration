@@ -101,8 +101,8 @@
 				"[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apimServiceName'), 'utility-api-messaging', 'service-bus-send-message')]"
 			],
 			"properties": {
-				"policyContent": "<policies>    <inbound>        <base />        <set-backend-service base-url='https://B2BMessages.servicebus.windows.net' />        <rewrite-uri template='orders_in/messages' />        <set-header name='Content-Type' exists-action='override'>            <value>vnd.microsoft.servicebus.yml</value>        </set-header>        <set-header name='Authorization' exists-action='override'>   <value>{{SendListenToken}}</value>        </set-header>        <set-header name='BrokerProperties' exists-action='override'>            <value>@{var json = new JObject();json.Add('MessageId', context.RequestId);json.Add('Label', 'TestData');     return json.ToString(Newtonsoft.Json.Formatting.None);   }</value> </set-header>        <set-body>@{JObject json = context.Request.Body.As<JObject>(preserveContent: true);return JsonConvert.SerializeObject(json);}</set-body></inbound><backend><base />    </backend>    <outbound>        <base />    </outbound>    <on-error>        <base />        <return-response>            <set-status code='200' reason='OK' />        </return-response>    </on-error> </policies>"
-			}
+                "policyContent": "<policies>\r\n  <inbound>\r\n    <base />\r\n    <rate-limit calls=\"20\" renewal-period=\"60\" />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>"
+            }
 		}
 	]
 }
