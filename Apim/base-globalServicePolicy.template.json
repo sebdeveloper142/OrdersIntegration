@@ -17,10 +17,9 @@
       "apiVersion": "2021-08-01",
       "type": "Microsoft.ApiManagement/service/policies",
       "name": "[concat(parameters('apimServiceName'), '/policy')]",
-      "properties": {
-        "value": "[concat(parameters('policyXMLBaseUrl'), 'globalServicePolicy.xml', parameters('policyXMLSasToken'))]",
-        "format": "rawxml-link"
-      }
+	  "properties": {
+				"policyContent": "<policies>    <inbound />    <backend>        <forward-request />    </backend>    <outbound />    <on-error /></policies>"
+			}
     }
   ]
 }
