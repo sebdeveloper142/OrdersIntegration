@@ -4,6 +4,9 @@
 	"parameters": {
 		"apimServiceName": {
 			"value": "B2BApiGateway"
+		},
+		"policyXMLBaseUrl": {
+			"value": "https://testr68.blob.core.windows.net/policies?sp=r&st=2022-08-06T18:31:35Z&se=2022-10-13T02:31:35Z&spr=https&sv=2021-06-08&sr=c&sig=eBe9dTuO22QIqKul9C8jY8JVqMTnmH3eUWelmTl1DbU%3D"
 		}
 	},
 	"resources": []
