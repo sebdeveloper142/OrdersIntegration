@@ -6,7 +6,7 @@
 			"value": "B2BApiGateway"
 		},
 		"policyXMLBaseUrl": {
-			"value": "https://testr68.blob.core.windows.net/policies?sp=racwdl&st=2022-07-25T22:00:00Z&se=2022-11-23T23:00:00Z&sv=2021-06-08&sr=c&sig=ZZSdI5%2FD8zIz2LpqHhePlgHnN%2BkNkbOYlxTLTwiNpp8%3D"
+			"value": "https://testr68.blob.core.windows.net/policies"
 		}
 	},
 	"resources": []
