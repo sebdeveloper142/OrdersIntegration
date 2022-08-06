@@ -129,7 +129,8 @@
 				"[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'starter')]"
 			],
 			"properties": {
-				"policyContent": "<policies>\r\n  <inbound>\r\n    <base />\r\n    <rate-limit calls=\"20\" renewal-period=\"60\" />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>"
+				"value": "[concat(parameters('policyXMLBaseUrl'), 'starter-productPolicy.xml')]",
+				"format": "rawxml-link"
 			}
 		}
 	]
