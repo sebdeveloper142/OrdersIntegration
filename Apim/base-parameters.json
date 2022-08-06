@@ -7,10 +7,10 @@
 		},
 		"policyXMLBaseUrl": {
 			"value": "https://testr68.blob.core.windows.net/policies"
-		}
+		},
 		"policyXMLSasToken": {
 			"value": "true"
-    },
+    }
 	},
 	"resources": []
 }
