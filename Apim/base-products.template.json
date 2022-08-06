@@ -129,7 +129,7 @@
 				"[resourceId('Microsoft.ApiManagement/service/products', parameters('apimServiceName'), 'starter')]"
 			],
 			"properties": {
-				"value": "[concat(parameters('PolicyXMLBaseUrl'), '/starter-productPolicy.xml?sv=2020-10-02&st=2022-08-06T19%3A00%3A49Z&se=2022-08-07T19%3A00%3A49Z&sr=b&sp=racd&sig=WQIdpsRAc5cqAT4eHQWN92h8PJ5xYub7CgESjkEQ%2BCk%3D",
+				"value": "parameters('PolicyXMLBaseUrl')",
 				"format": "rawxml-link"
 			}
 		}
