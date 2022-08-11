@@ -4,25 +4,6 @@
   "parameters": {
     "apimServiceName": {
       "value": "B2BApiSolution"
-    },
-    "namedValues": {
-      "value": {
-        "ordersreceive": "[parameters('namedValues').ordersreceive]",
-        "orderssend": "[parameters('namedValues').orderssend]"
-      }
-    },
-    "namedValueKeyVaultSecrets": {
-      "value": {}
-    },
-    "serviceUrl": {
-      "value": {
-        "orders": null,
-        "ordersrev2": null
-      }
-    },
-    "loggerResourceId": {
-      "value": {}
     }
-  },
   "resources": []
 }
