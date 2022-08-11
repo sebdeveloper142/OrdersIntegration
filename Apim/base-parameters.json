@@ -4,6 +4,6 @@
   "parameters": {
     "apimServiceName": {
       "value": "B2BApiSolution"
-    }
+    },
   "resources": []
 }
