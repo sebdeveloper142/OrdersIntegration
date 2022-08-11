@@ -84,7 +84,7 @@
     },
     "arm_serviceBus_Out_Connection_DisplayName": {
       "type": "string",
-      "defaultValue": "orders_in"
+      "defaultValue": "orders_receive"
     },
     "arm_serviceBus_Out_connectionString": {
       "type": "securestring",
@@ -156,7 +156,7 @@
                       "SessionId": "@triggerBody()?['MessageId']",
                       "ContentData": "@{base64(body('Transform_XML'))}"
                     },
-                    "path": "/@{encodeURIComponent(encodeURIComponent('orders_out'))}/messages"
+                    "path": "/@{encodeURIComponent(encodeURIComponent('orders_send'))}/messages"
                   },
                   "runAfter": {
                     "Transform_XML": [
@@ -202,7 +202,7 @@
                   }
                 },
                 "method": "get",
-                "path": "/@{encodeURIComponent(encodeURIComponent('orders_in'))}/messages/head",
+                "path": "/@{encodeURIComponent(encodeURIComponent('orders_receive'))}/messages/head",
                 "queries": {
                   "queueType": "Main"
                 }
