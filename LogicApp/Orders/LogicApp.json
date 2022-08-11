@@ -216,7 +216,7 @@
                   }
                 },
                 "method": "get",
-                "path": "/@{encodeURIComponent(encodeURIComponent('orders_'))}/messages/head",
+                "path": "/@{encodeURIComponent(encodeURIComponent('orders_in'))}/messages/head",
                 "queries": {
                   "queueType": "Main"
                 }
