@@ -13,37 +13,25 @@
     {
       "apiVersion": "2021-08-01",
       "type": "Microsoft.ApiManagement/service/namedValues",
-      "name": "[concat(parameters('apimServiceName'), '/RootManageSharedAccessKey')]",
-      "originalName": "RootManageSharedAccessKey",
+      "name": "[concat(parameters('apimServiceName'), '/orders-receive')]",
+      "originalName": "orders-receive",
       "properties": {
         "tags": [],
         "secret": true,
-        "displayName": "RootManageSharedAccessKey",
-        "value": "[parameters('namedValues').RootManageSharedAccessKey]"
+        "displayName": "orders-receive",
+        "value": "[parameters('namedValues').ordersreceive]"
       }
     },
     {
       "apiVersion": "2021-08-01",
       "type": "Microsoft.ApiManagement/service/namedValues",
-      "name": "[concat(parameters('apimServiceName'), '/SendListenToken')]",
-      "originalName": "SendListenToken",
+      "name": "[concat(parameters('apimServiceName'), '/orders-send')]",
+      "originalName": "orders-send",
       "properties": {
         "tags": [],
         "secret": true,
-        "displayName": "SendListenToken",
-        "value": "[parameters('namedValues').SendListenToken]"
-      }
-    },
-    {
-      "apiVersion": "2021-08-01",
-      "type": "Microsoft.ApiManagement/service/namedValues",
-      "name": "[concat(parameters('apimServiceName'), '/SendListenTokenOut')]",
-      "originalName": "SendListenTokenOut",
-      "properties": {
-        "tags": [],
-        "secret": true,
-        "displayName": "SendListenTokenOut",
-        "value": "[parameters('namedValues').SendListenTokenOut]"
+        "displayName": "orders-send",
+        "value": "[parameters('namedValues').orderssend]"
       }
     }
   ]

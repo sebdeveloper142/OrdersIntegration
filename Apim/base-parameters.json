@@ -3,13 +3,25 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "apimServiceName": {
-      "value": "B2BApiGateway"
+      "value": "B2BApiSolution"
     },
-    "policyXMLBaseUrl": {
-      "value": "https://devopsstorageapim.blob.core.windows.net/policies"
+    "namedValues": {
+      "value": {
+        "ordersreceive": "[parameters('namedValues').ordersreceive]",
+        "orderssend": "[parameters('namedValues').orderssend]"
+      }
     },
-    "policyXMLSasToken": {
-      "value": "sp=racwdli&st=2022-08-06T20:52:02Z&se=2022-12-22T05:52:02Z&spr=https&sv=2021-06-08&sr=c&sig=%2BdZjjsT1kUcfu1kd1iv0gxt0jNDfUvn4L%2Bbeehqnghk%3D"
+    "namedValueKeyVaultSecrets": {
+      "value": {}
+    },
+    "serviceUrl": {
+      "value": {
+        "orders": null,
+        "ordersrev2": null
+      }
+    },
+    "loggerResourceId": {
+      "value": {}
     }
   },
   "resources": []

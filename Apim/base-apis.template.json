@@ -1,108 +1,176 @@
 {
-	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-	"contentVersion": "1.0.0.0",
-	"parameters": {
-		"apimServiceName": {
-			"type": "string"
-		},
-		"serviceUrl": {
-			"type": "object"
-		}
-	},
-	"resources": [
-		{
-			"apiVersion": "2021-08-01",
-			"type": "Microsoft.ApiManagement/service/apis",
-			"name": "[concat(parameters('apimServiceName'), '/utility-api-messaging')]",
-			"dependsOn": [],
-			"properties": {
-				"description": "This serves as a reley between cliend and service bus",
-				"authenticationSettings": {
-					"subscriptionKeyRequired": false
-				},
-				"subscriptionKeyParameterNames": {
-					"header": "Ocp-Apim-Subscription-Key",
-					"query": "subscription-key"
-				},
-				"apiRevision": "1",
-				"isCurrent": true,
-				"subscriptionRequired": true,
-				"displayName": "Utility - API Messaging",
-				"serviceUrl": "[parameters('serviceUrl').utilityapimessaging]",
-				"path": "",
-				"protocols": [
-					"https"
-				]
-			}
-		},
-		{
-			"apiVersion": "2021-08-01",
-			"type": "Microsoft.ApiManagement/service/products/apis",
-			"name": "[concat(parameters('apimServiceName'), '/starter/utility-api-messaging')]",
-			"dependsOn": [
-				"[resourceId('Microsoft.ApiManagement/service/apis', parameters('apimServiceName'), 'utility-api-messaging')]"
-			],
-			"properties": {
-				"displayName": "Starter",
-				"description": "Subscribers will be able to run 5 calls/minute up to a maximum of 100 calls/week.",
-				"subscriptionRequired": true,
-				"approvalRequired": false,
-				"state": "published"
-			}
-		},
-		{
-			"apiVersion": "2021-08-01",
-			"type": "Microsoft.ApiManagement/service/apis/operations",
-			"name": "[concat(parameters('apimServiceName'), '/utility-api-messaging/service-bus-get-message')]",
-			"dependsOn": [
-				"[resourceId('Microsoft.ApiManagement/service/apis', parameters('apimServiceName'), 'utility-api-messaging')]"
-			],
-			"properties": {
-				"displayName": "Service Bus - Get message",
-				"method": "DELETE",
-				"urlTemplate": "/servicebus/out",
-				"description": "Get message from queue",
-				"templateParameters": [],
-				"responses": []
-			}
-		},
-		{
-			"apiVersion": "2021-08-01",
-			"type": "Microsoft.ApiManagement/service/apis/operations",
-			"name": "[concat(parameters('apimServiceName'), '/utility-api-messaging/service-bus-send-message')]",
-			"dependsOn": [
-				"[resourceId('Microsoft.ApiManagement/service/apis', parameters('apimServiceName'), 'utility-api-messaging')]"
-			],
-			"properties": {
-				"displayName": "Service Bus - Send message",
-				"method": "POST",
-				"urlTemplate": "/servicebus/in",
-				"description": "",
-				"templateParameters": [],
-				"responses": []
-			}
-		},
-		{
-			"apiVersion": "2021-08-01",
-			"type": "Microsoft.ApiManagement/service/apis/operations/policies",
-			"name": "[concat(parameters('apimServiceName'), '/utility-api-messaging/service-bus-get-message/policy')]",
-			"dependsOn": [
-				"[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apimServiceName'), 'utility-api-messaging', 'service-bus-get-message')]"
-			],
-			"properties": {
-				"policyContent": "<policies>    <inbound>        <base />        <set-method>DELETE</set-method>        <set-backend-service base-url='https://B2BMessages.servicebus.windows.net/orders_out/messages/head' />        <rewrite-uri template='/' />        <set-header name='Content-Type' exists-action='override'>            <value>vnd.microsoft.servicebus.yml</value>        </set-header>        <set-header name='Authorization' exists-action='override'>            <value>{{RootManageSharedAccessKey}}</value>        </set-header>    </inbound>    <backend>        <base />    </backend>    <outbound>        <base />    </outbound>    <on-error>        <base />    </on-error> </policies>"
-			}
-		},
-		{
-			"apiVersion": "2021-08-01",
-			"type": "Microsoft.ApiManagement/service/apis/operations/policies",
-			"name": "[concat(parameters('apimServiceName'), '/utility-api-messaging/service-bus-send-message/policy')]",
-			"dependsOn": [
-				"[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apimServiceName'), 'utility-api-messaging', 'service-bus-send-message')]"
-			],
-			"properties": {
-				"policyContent": "<policies>    <inbound>        <base />        <set-backend-service base-url='https://B2BMessages.servicebus.windows.net' />        <rewrite-uri template='orders_in/messages' />        <set-header name='Content-Type' exists-action='override'>            <value>vnd.microsoft.servicebus.yml</value>        </set-header>        <set-header name='Authorization' exists-action='override'>   <value>{{SendListenToken}}</value>        </set-header>        <set-header name='BrokerProperties' exists-action='override'>            <value>@{var json = new JObject();json.Add('MessageId', context.RequestId);json.Add('Label', 'TestData');     return json.ToString(Newtonsoft.Json.Formatting.None);   }</value> </set-header>        <set-body>@{JObject json = context.Request.Body.As<JObject>(preserveContent: true);return JsonConvert.SerializeObject(json);}</set-body></inbound><backend><base />    </backend>    <outbound>        <base />    </outbound>    <on-error>        <base />        <return-response>            <set-status code='200' reason='OK' />        </return-response>    </on-error> </policies>"
-			}
-		}
-	]
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apimServiceName": {
+      "type": "string"
+    },
+    "serviceUrl": {
+      "type": "object"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis",
+      "name": "[concat(parameters('apimServiceName'), '/orders')]",
+      "dependsOn": [],
+      "properties": {
+        "description": "",
+        "authenticationSettings": {
+          "subscriptionKeyRequired": false
+        },
+        "subscriptionKeyParameterNames": {
+          "header": "Ocp-Apim-Subscription-Key",
+          "query": "subscription-key"
+        },
+        "apiRevision": "1",
+        "isCurrent": true,
+        "subscriptionRequired": true,
+        "displayName": "orders",
+        "serviceUrl": "[parameters('serviceUrl').orders]",
+        "path": "",
+        "protocols": [
+          "https"
+        ]
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis",
+      "name": "[concat(parameters('apimServiceName'), '/orders;rev=2')]",
+      "dependsOn": [],
+      "properties": {
+        "description": "",
+        "authenticationSettings": {
+          "subscriptionKeyRequired": false
+        },
+        "subscriptionKeyParameterNames": {
+          "header": "Ocp-Apim-Subscription-Key",
+          "query": "subscription-key"
+        },
+        "apiRevision": "2",
+        "apiRevisionDescription": "working version",
+        "subscriptionRequired": true,
+        "displayName": "orders",
+        "serviceUrl": "[parameters('serviceUrl').ordersrev2]",
+        "path": "",
+        "protocols": [
+          "https"
+        ]
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "name": "[concat(parameters('apimServiceName'), '/orders/receive-order')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apimServiceName'), 'orders')]"
+      ],
+      "properties": {
+        "displayName": "receive-order",
+        "method": "DELETE",
+        "urlTemplate": "/receive-order",
+        "description": "",
+        "templateParameters": [],
+        "responses": []
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "name": "[concat(parameters('apimServiceName'), '/orders/send-orders')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apimServiceName'), 'orders')]"
+      ],
+      "properties": {
+        "displayName": "send-orders",
+        "method": "POST",
+        "urlTemplate": "/send-order",
+        "description": "",
+        "templateParameters": [],
+        "responses": []
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "name": "[concat(parameters('apimServiceName'), '/orders;rev=2/receive-order')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apimServiceName'), 'orders;rev=2')]"
+      ],
+      "properties": {
+        "displayName": "receive-order",
+        "method": "DELETE",
+        "urlTemplate": "/receive-order",
+        "description": "",
+        "templateParameters": [],
+        "responses": []
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "name": "[concat(parameters('apimServiceName'), '/orders;rev=2/send-orders')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('apimServiceName'), 'orders;rev=2')]"
+      ],
+      "properties": {
+        "displayName": "send-orders",
+        "method": "POST",
+        "urlTemplate": "/send-order",
+        "description": "",
+        "templateParameters": [],
+        "responses": []
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+      "name": "[concat(parameters('apimServiceName'), '/orders/receive-order/policy')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apimServiceName'), 'orders', 'receive-order')]"
+      ],
+      "properties": {
+        "value": "<policies>\r\n  <inbound>\r\n    <base />\r\n    <set-method>DELETE</set-method>\r\n    <set-backend-service base-url=\"https://sebbify-orders.servicebus.windows.net/orders_send/messages/head\" />\r\n    <rewrite-uri template=\"/\" />\r\n    <set-header name=\"Content-Type\" exists-action=\"override\">\r\n      <value>vnd.microsoft.servicebus.yml</value>\r\n    </set-header>\r\n    <set-header name=\"Authorization\" exists-action=\"override\">\r\n      <value>{{orders-send}}</value>\r\n    </set-header>\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>",
+        "format": "xml"
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+      "name": "[concat(parameters('apimServiceName'), '/orders/send-orders/policy')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apimServiceName'), 'orders', 'send-orders')]"
+      ],
+      "properties": {
+        "value": "<!--\r\n    IMPORTANT:\r\n    - Policy elements can appear only within the <inbound>, <outbound>, <backend> section elements.\r\n    - To apply a policy to the incoming request (before it is forwarded to the backend service), place a corresponding policy element within the <inbound> section element.\r\n    - To apply a policy to the outgoing response (before it is sent back to the caller), place a corresponding policy element within the <outbound> section element.\r\n    - To add a policy, place the cursor at the desired insertion point and select a policy from the sidebar.\r\n    - To remove a policy, delete the corresponding policy statement from the policy document.\r\n    - Position the <base> element within a section element to inherit all policies from the corresponding section element in the enclosing scope.\r\n    - Remove the <base> element to prevent inheriting policies from the corresponding section element in the enclosing scope.\r\n    - Policies are applied in the order of their appearance, from the top down.\r\n    - Comments within policy elements are not supported and may disappear. Place your comments between policy elements or at a higher level scope.\r\n-->\r\n<policies>\r\n  <inbound>\r\n    <base />\r\n    <set-backend-service base-url=\"https://sebbify-orders.servicebus.windows.net\" />\r\n    <rewrite-uri template=\"orders_receive/messages\" />\r\n    <set-header name=\"Content-Type\" exists-action=\"override\">\r\n      <value>vnd.microsoft.servicebus.yml</value>\r\n    </set-header>\r\n    <set-header name=\"Authorization\" exists-action=\"override\">\r\n      <value>{{orders-receive}}</value>\r\n    </set-header>\r\n    <set-header name=\"BrokerProperties\" exists-action=\"override\">\r\n      <value>@{\r\n                    var json = new JObject();\r\n                    json.Add(\"MessageId\", context.RequestId);\r\n                    json.Add(\"Label\", \"TestData\");\r\n                    return json.ToString(Newtonsoft.Json.Formatting.None);\r\n                }</value>\r\n    </set-header>\r\n    <set-body>@{\r\n                JObject json = context.Request.Body.As&lt;JObject&gt;(preserveContent: true);\r\n                return JsonConvert.SerializeObject(json);\r\n            }</set-body>\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n    <return-response>\r\n      <set-status code=\"200\" reason=\"OK\" />\r\n    </return-response>\r\n  </on-error>\r\n</policies>",
+        "format": "xml"
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+      "name": "[concat(parameters('apimServiceName'), '/orders;rev=2/receive-order/policy')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apimServiceName'), 'orders;rev=2', 'receive-order')]"
+      ],
+      "properties": {
+        "value": "<policies>\r\n  <inbound>\r\n    <base />\r\n    <set-method>DELETE</set-method>\r\n    <set-backend-service base-url=\"https://sebbify-orders.servicebus.windows.net/orders_send/messages/head\" />\r\n    <rewrite-uri template=\"/\" />\r\n    <set-header name=\"Content-Type\" exists-action=\"override\">\r\n      <value>vnd.microsoft.servicebus.yml</value>\r\n    </set-header>\r\n    <set-header name=\"Authorization\" exists-action=\"override\">\r\n      <value>{{orders-send}}</value>\r\n    </set-header>\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>",
+        "format": "xml"
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+      "name": "[concat(parameters('apimServiceName'), '/orders;rev=2/send-orders/policy')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apimServiceName'), 'orders;rev=2', 'send-orders')]"
+      ],
+      "properties": {
+        "value": "<!--\r\n    IMPORTANT:\r\n    - Policy elements can appear only within the <inbound>, <outbound>, <backend> section elements.\r\n    - To apply a policy to the incoming request (before it is forwarded to the backend service), place a corresponding policy element within the <inbound> section element.\r\n    - To apply a policy to the outgoing response (before it is sent back to the caller), place a corresponding policy element within the <outbound> section element.\r\n    - To add a policy, place the cursor at the desired insertion point and select a policy from the sidebar.\r\n    - To remove a policy, delete the corresponding policy statement from the policy document.\r\n    - Position the <base> element within a section element to inherit all policies from the corresponding section element in the enclosing scope.\r\n    - Remove the <base> element to prevent inheriting policies from the corresponding section element in the enclosing scope.\r\n    - Policies are applied in the order of their appearance, from the top down.\r\n    - Comments within policy elements are not supported and may disappear. Place your comments between policy elements or at a higher level scope.\r\n-->\r\n<policies>\r\n  <inbound>\r\n    <base />\r\n    <set-backend-service base-url=\"https://sebbify-orders.servicebus.windows.net\" />\r\n    <rewrite-uri template=\"orders_receive/messages\" />\r\n    <set-header name=\"Content-Type\" exists-action=\"override\">\r\n      <value>vnd.microsoft.servicebus.yml</value>\r\n    </set-header>\r\n    <set-header name=\"Authorization\" exists-action=\"override\">\r\n      <value>{{orders-receive}}</value>\r\n    </set-header>\r\n    <set-header name=\"BrokerProperties\" exists-action=\"override\">\r\n      <value>@{\r\n                    var json = new JObject();\r\n                    json.Add(\"MessageId\", context.RequestId);\r\n                    json.Add(\"Label\", \"TestData\");\r\n                    return json.ToString(Newtonsoft.Json.Formatting.None);\r\n                }</value>\r\n    </set-header>\r\n    <set-body>@{\r\n                JObject json = context.Request.Body.As&lt;JObject&gt;(preserveContent: true);\r\n                return JsonConvert.SerializeObject(json);\r\n            }</set-body>\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n    <return-response>\r\n      <set-status code=\"200\" reason=\"OK\" />\r\n    </return-response>\r\n  </on-error>\r\n</policies>",
+        "format": "xml"
+      }
+    }
+  ]
 }
