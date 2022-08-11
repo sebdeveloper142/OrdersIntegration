@@ -180,8 +180,27 @@
                   }
                 },
                 "method": "post",
-                "body": "@base64ToBinary(triggerBody()?['ContentData'])",
+                "body": "@body('Parse_JSON')?['x12']",
                 "path": "/decode"
+              },
+              "runAfter": {
+                "Parse_JSON": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Parse_JSON": {
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@triggerBody()?['ContentData']",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "x12": {
+                      "type": "string"
+                    }
+                  }
+                }
               },
               "runAfter": {}
             }
