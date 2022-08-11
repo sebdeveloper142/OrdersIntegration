@@ -1,1 +1,2 @@
 C:\Users\Sebastian Bäckström\source\repos\Orders\Orders\obj\Debug\Orders.deployproj.CoreCompileInputs.cache
+C:\Users\Sebastian Bäckström\source\repos\OrderIntegration\LogicApp\Orders\obj\Debug\Orders.deployproj.CoreCompileInputs.cache
