@@ -192,7 +192,7 @@
             "Parse_JSON": {
               "type": "ParseJson",
               "inputs": {
-                "content": "@triggerBody()?['ContentData']",
+                "content": "@json(base64ToString(triggerBody()?['ContentData']))",
                 "schema": {
                   "type": "object",
                   "properties": {
