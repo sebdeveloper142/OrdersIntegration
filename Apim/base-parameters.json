@@ -5,12 +5,6 @@
     "apimServiceName": {
       "value": "B2BApiSolution"
     },
-    "namedValues": {
-      "value": {
-        "ordersreceive": "[parameters('namedValues').ordersreceive]",
-        "orderssend": "[parameters('namedValues').orderssend]"
-      }
-    },
   "resources": []
 }
 }
