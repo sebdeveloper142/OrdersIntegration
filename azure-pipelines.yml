@@ -20,7 +20,7 @@ steps:
     location: 'North Europe'
     templateLocation: 'URL of the file'
     csmFileLink: 'https://raw.githubusercontent.com/sebdeveloper142/OrdersIntegration/main/ServiceBus/servicebus-template.json'
-    csmParametersFileLink: 'LogicApp/ServiceBus/servicebus-parameters.json'
+    csmParametersFileLink: 'https://raw.githubusercontent.com/sebdeveloper142/OrdersIntegration/main/ServiceBus/servicebus-parameters.json'
     deploymentMode: 'Incremental'
 
 - script: |
