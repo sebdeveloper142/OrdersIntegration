@@ -8,6 +8,9 @@
     "serviceBusQueueName": {
       "value": "orders-in"
     },
+    "location": {
+      "value": "North Europe"
+    },
   "resources": []
 }
 }
