@@ -3,9 +3,9 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "serviceBusNamespaceName": {
-      "value": "orders-out"
+      "value": "orders"
     },
-    "serviceBusNamespaceName": {
+    "serviceBusQueueName": {
       "value": "orders-in"
     },
   "resources": []
