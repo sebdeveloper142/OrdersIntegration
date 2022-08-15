@@ -5,8 +5,11 @@
     "serviceBusNamespaceName": {
       "value": "orders-sebify"
     },
-    "serviceBusQueueName": {
+    "serviceBusQueueNameIn": {
       "value": "orders-in"
+    },
+    "serviceBusQueueNameOut": {
+      "value": "orders-out"
     },
     "location": {
       "value": "North Europe"
