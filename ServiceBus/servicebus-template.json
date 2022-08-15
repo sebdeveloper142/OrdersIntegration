@@ -21,10 +21,16 @@
         "description": "Name of the Queue"
       }
     },
-     "serviceBusQueueNameOut": {
+    "serviceBusQueueNameOut": {
       "type": "string",
       "metadata": {
         "description": "Name of the Queue"
+      }
+    },
+     "queueAuthorizationRuleName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the autorization name in a queue"
       }
     },
     "location": {
@@ -63,27 +69,23 @@
         "enablePartitioning": false,
         "enableExpress": false
       },
-      "resources": [
-        {
-"apiVersion": "2017-04-01",
-"name": "ReadOnlyKey",
-"type": "AuthorizationRules",
-"dependsOn": [
-"[variables(‘serviceBusQueueNameIn’)]"
-],
-"properties": {
-"keyName": "ReadOnlyKey",
-"claimType": "SharedAccessKey",
-"claimValue": "None",
-"rights": [ "Send" ],
-"revision": -1
-}
-}
-      ]
 
       "dependsOn": [
         "[resourceId('Microsoft.ServiceBus/namespaces', parameters('serviceBusNamespaceName'))]"
-      ]
+      ],
+      "resources": [
+                        {
+                            "apiVersion": "[variables('sbVersion')]",
+                            "name": "[parameters('queueAuthorizationRuleName')]",
+                            "type": "authorizationRules",
+                            "dependsOn": [
+                                "[parameters('serviceBusQueueNameIn')]"
+                            ],
+                            "properties": {
+                                "Rights": ["Listen"]
+                            }
+                        }
+                    ]
     },
     {
       "type": "Microsoft.ServiceBus/namespaces/queues",

@@ -11,6 +11,9 @@
     "serviceBusQueueNameOut": {
       "value": "orders-out"
     },
+     "queueAuthorizationRuleName": {
+      "value": "orders-out"
+    },
     "location": {
       "value": "North Europe"
     }
