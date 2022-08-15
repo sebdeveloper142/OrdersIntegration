@@ -75,7 +75,7 @@
       ],
       "resources": [
                         {
-                            "apiVersion": "[variables('sbVersion')]",
+                            "apiVersion": "2017-04-01",
                             "name": "[parameters('queueAuthorizationRuleName')]",
                             "type": "authorizationRules",
                             "dependsOn": [
