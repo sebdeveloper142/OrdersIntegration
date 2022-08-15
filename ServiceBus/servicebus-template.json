@@ -62,18 +62,24 @@
         "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
         "enablePartitioning": false,
         "enableExpress": false
-      },"resources": [
-                        {
-                            "apiVersion": "2017-04-01",
-                            "name": "[parameters('queueAuthorizationRuleName')]",
-                            "type": "authorizationRules",
-                            "dependsOn": [
-                                "[parameters('serviceBusQueueNameIn')]"
-                            ],
-                            "properties": {
-                                "Rights": ["Listen"]
-                            }
-                        },
+      },
+      "resources": [
+        {
+"apiVersion": "2017-04-01",
+"name": "ReadOnlyKey",
+"type": "AuthorizationRules",
+"dependsOn": [
+"[variables(‘serviceBusQueueNameIn’)]"
+],
+"properties": {
+"keyName": "ReadOnlyKey",
+"claimType": "SharedAccessKey",
+"claimValue": "None",
+"rights": [ "Send" ],
+"revision": -1
+}
+}
+      ]
 
       "dependsOn": [
         "[resourceId('Microsoft.ServiceBus/namespaces', parameters('serviceBusNamespaceName'))]"
