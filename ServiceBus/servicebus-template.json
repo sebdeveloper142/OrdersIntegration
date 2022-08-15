@@ -21,7 +21,7 @@
         "description": "Name of the Queue"
       }
     },
-    "serviceBusQueueNameOut": {
+     "serviceBusQueueNameOut": {
       "type": "string",
       "metadata": {
         "description": "Name of the Queue"
@@ -63,7 +63,12 @@
         "enablePartitioning": false,
         "enableExpress": false
       },
-       {
+
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('serviceBusNamespaceName'))]"
+      ]
+    },
+    {
       "type": "Microsoft.ServiceBus/namespaces/queues",
       "apiVersion": "2017-04-01",
       "name": "[format('{0}/{1}', parameters('serviceBusNamespaceName'), parameters('serviceBusQueueNameOut'))]",
@@ -80,6 +85,7 @@
         "enablePartitioning": false,
         "enableExpress": false
       },
+
       "dependsOn": [
         "[resourceId('Microsoft.ServiceBus/namespaces', parameters('serviceBusNamespaceName'))]"
       ]
