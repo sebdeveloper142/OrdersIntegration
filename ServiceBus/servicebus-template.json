@@ -82,7 +82,7 @@
                                 "[parameters('serviceBusQueueNameIn')]"
                             ],
                             "properties": {
-                                "Rights": ["Listen"]
+                                "Rights": ["Send"]
                             }
                         }
                     ]

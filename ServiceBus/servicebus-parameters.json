@@ -12,7 +12,7 @@
       "value": "orders-out"
     },
      "queueAuthorizationRuleName": {
-      "value": "orders-out"
+      "value": "Send"
     },
     "location": {
       "value": "North Europe"
