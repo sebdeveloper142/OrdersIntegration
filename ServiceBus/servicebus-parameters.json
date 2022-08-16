@@ -15,7 +15,7 @@
       "value": "Send"
     },
     "queueAuthorizationRuleNameOut": {
-      "value": "Manage"
+      "value": "Listen"
     },
     "location": {
       "value": "North Europe"
