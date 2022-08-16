@@ -27,7 +27,13 @@
         "description": "Name of the Queue"
       }
     },
-     "queueAuthorizationRuleName": {
+     "queueAuthorizationRuleNameIn": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the autorization name in a queue"
+      }
+    },
+	"queueAuthorizationRuleNameOut": {
       "type": "string",
       "metadata": {
         "description": "Name of the autorization name in a queue"
