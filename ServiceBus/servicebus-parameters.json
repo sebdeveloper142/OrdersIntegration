@@ -11,10 +11,16 @@
     "serviceBusQueueNameOut": {
       "value": "orders-out"
     },
-    "queueAuthorizationRuleNameIn": {
+    "inQueueAuthorizationSend": {
       "value": "Send"
     },
-    "queueAuthorizationRuleNameOut": {
+    "inQueueAuthorizationListen": {
+      "value": "Listen"
+    },
+    "outQueueAuthorizationSend": {
+      "value": "Send"
+    },
+    "outQueueAuthorizationListen": {
       "value": "Listen"
     },
     "location": {
