@@ -92,7 +92,6 @@
         "description": "Azure Service Bus Connection String"
       }
     },
-
     "x12_1_Connection_Name": {
       "type": "string",
       "defaultValue": "x12"
@@ -107,34 +106,6 @@
         "description": "Integration Account ID"
       },
       "defaultValue": "/subscriptions/c091862c-e1ab-44f1-876b-e55133fadc1a/resourceGroups/SebsB2B/providers/Microsoft.Logic/integrationAccounts/SebsB2B"
-    },
-    "servicebus_1_Connection_Name": {
-      "type": "string",
-      "defaultValue": "servicebus-11"
-    },
-    "servicebus_1_Connection_DisplayName": {
-      "type": "string",
-      "defaultValue": "orders-in"
-    },
-    "servicebus_1_connectionString": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Azure Service Bus Connection String"
-      }
-    },
-    "servicebus_2_Connection_Name": {
-      "type": "string",
-      "defaultValue": "servicebus-12"
-    },
-    "servicebus_2_Connection_DisplayName": {
-      "type": "string",
-      "defaultValue": "orders-out"
-    },
-    "servicebus_2_connectionString": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Azure Service Bus Connection String"
-      }
     }
   },
   "variables": {
@@ -177,7 +148,7 @@
                   "inputs": {
                     "host": {
                       "connection": {
-                        "name": "@parameters('$connections')['servicebus_2']['connectionId']"
+                        "name": "@parameters('$connections')['servicebus_4']['connectionId']"
                       }
                     },
                     "method": "post",
@@ -246,7 +217,7 @@
               "inputs": {
                 "host": {
                   "connection": {
-                    "name": "@parameters('$connections')['servicebus_1']['connectionId']"
+                    "name": "@parameters('$connections')['servicebus']['connectionId']"
                   }
                 },
                 "method": "get",
@@ -267,29 +238,29 @@
         "parameters": {
           "$connections": {
             "value": {
-              "servicebus_2": {
+              "servicebus_4": {
                 "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'servicebus')]",
-                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('servicebus_2_Connection_Name'))]",
-                "connectionName": "[parameters('servicebus_2_Connection_Name')]"
+                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('arm_serviceBus_Out_Connection_Name'))]",
+                "connectionName": "[parameters('arm_serviceBus_Out_Connection_Name')]"
               },
               "x12": {
                 "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'x12')]",
                 "connectionId": "[resourceId('Microsoft.Web/connections', parameters('x12_1_Connection_Name'))]",
                 "connectionName": "[parameters('x12_1_Connection_Name')]"
               },
-              "servicebus_1": {
+              "servicebus": {
                 "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'servicebus')]",
-                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('servicebus_1_Connection_Name'))]",
-                "connectionName": "[parameters('servicebus_1_Connection_Name')]"
+                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('arm_serviceBus_Connection_Name'))]",
+                "connectionName": "[parameters('arm_serviceBus_Connection_Name')]"
               }
             }
           }
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/connections', parameters('servicebus_2_Connection_Name'))]",
+        "[resourceId('Microsoft.Web/connections', parameters('arm_serviceBus_Out_Connection_Name'))]",
         "[resourceId('Microsoft.Web/connections', parameters('x12_1_Connection_Name'))]",
-        "[resourceId('Microsoft.Web/connections', parameters('servicebus_1_Connection_Name'))]"
+        "[resourceId('Microsoft.Web/connections', parameters('arm_serviceBus_Connection_Name'))]"
       ]
     },
     {
@@ -335,36 +306,6 @@
         "parameterValues": {
           "integrationAccountId": "[parameters('x12_1_integrationAccountId')]",
           "integrationAccountUrl": "[listCallbackURL(parameters('x12_1_integrationAccountId'), '2015-08-01-preview').value]"
-        }
-      }
-    },
-    {
-      "type": "MICROSOFT.WEB/CONNECTIONS",
-      "apiVersion": "2018-07-01-preview",
-      "name": "[parameters('servicebus_1_Connection_Name')]",
-      "location": "[parameters('logicAppLocation')]",
-      "properties": {
-        "api": {
-          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'servicebus')]"
-        },
-        "displayName": "[parameters('servicebus_1_Connection_DisplayName')]",
-        "parameterValues": {
-          "connectionString": "[parameters('servicebus_1_connectionString')]"
-        }
-      }
-    },
-    {
-      "type": "MICROSOFT.WEB/CONNECTIONS",
-      "apiVersion": "2018-07-01-preview",
-      "name": "[parameters('servicebus_2_Connection_Name')]",
-      "location": "[parameters('logicAppLocation')]",
-      "properties": {
-        "api": {
-          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'servicebus')]"
-        },
-        "displayName": "[parameters('servicebus_2_Connection_DisplayName')]",
-        "parameterValues": {
-          "connectionString": "[parameters('servicebus_2_connectionString')]"
         }
       }
     }
