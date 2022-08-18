@@ -1,0 +1,32 @@
+<xs:element name="Orders">
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element name="Order">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Header">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="PONumber" type="xs:string"/>
+									<xs:element name="PODate" type="xs:string"/>
+									<xs:element name="CustomerName" type="xs:string"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="LineItems">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ItemId" type="xs:string"/>
+									<xs:element name="Quantity" type="xs:string"/>
+									<xs:element name="UnitPrice" type="xs:string"/>
+									<xs:element name="ItemDescription" type="xs:string"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:element>
+</xs:schema>
