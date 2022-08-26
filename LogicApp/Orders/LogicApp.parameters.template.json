@@ -38,7 +38,7 @@
       "value": "orders-edi"
     },
     "eventhubs_1_connectionString": {
-      "value": "__eventhub_connectionstgring__"
+      "value": "__EventHubConnectionString__"
     }
   }
 }
