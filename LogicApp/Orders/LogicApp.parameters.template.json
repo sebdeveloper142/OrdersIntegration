@@ -30,6 +30,15 @@
 
     "x12_1_integrationAccountId": {
       "value": "__IntegrationAccount__"
+    },
+    "eventhubs_1_Connection_Name": {
+      "value": "event_hub_name"
+    },
+    "eventhubs_1_Connection_DisplayName": {
+      "value": "orders-edi"
+    },
+    "eventhubs_1_connectionString": {
+      "value": "__eventhub_connectionstgring__"
     }
   }
 }
