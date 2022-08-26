@@ -106,6 +106,20 @@
         "description": "Integration Account ID"
       },
       "defaultValue": "/subscriptions/c091862c-e1ab-44f1-876b-e55133fadc1a/resourceGroups/SebsB2B/providers/Microsoft.Logic/integrationAccounts/SebsB2B"
+    },
+    "eventhubs_1_Connection_Name": {
+      "type": "string",
+      "defaultValue": "eventhubs-8"
+    },
+    "eventhubs_1_Connection_DisplayName": {
+      "type": "string",
+      "defaultValue": "edi-orders-event"
+    },
+    "eventhubs_1_connectionString": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Azure Event Hubs Connection String"
+      }
     }
   },
   "variables": {
@@ -157,6 +171,26 @@
                       "ContentData": "@{base64(body('Transform_XML'))}"
                     },
                     "path": "/@{encodeURIComponent(encodeURIComponent('orders-out'))}/messages"
+                  },
+                  "runAfter": {
+                    "Transform_XML": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Send_event": {
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['eventhubs_1']['connectionId']"
+                      }
+                    },
+                    "method": "post",
+                    "body": {
+                      "ContentData": "@{triggerBody()?['ContentData']}"
+                    },
+                    "path": "/@{encodeURIComponent('ediorders')}/events"
                   },
                   "runAfter": {
                     "Transform_XML": [
@@ -252,6 +286,11 @@
                 "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'servicebus')]",
                 "connectionId": "[resourceId('Microsoft.Web/connections', parameters('arm_serviceBus_Connection_Name'))]",
                 "connectionName": "[parameters('arm_serviceBus_Connection_Name')]"
+              },
+              "eventhubs_1": {
+                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'eventhubs')]",
+                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('eventhubs_1_Connection_Name'))]",
+                "connectionName": "[parameters('eventhubs_1_Connection_Name')]"
               }
             }
           }
@@ -260,7 +299,8 @@
       "dependsOn": [
         "[resourceId('Microsoft.Web/connections', parameters('arm_serviceBus_Out_Connection_Name'))]",
         "[resourceId('Microsoft.Web/connections', parameters('x12_1_Connection_Name'))]",
-        "[resourceId('Microsoft.Web/connections', parameters('arm_serviceBus_Connection_Name'))]"
+        "[resourceId('Microsoft.Web/connections', parameters('arm_serviceBus_Connection_Name'))]",
+        "[resourceId('Microsoft.Web/connections', parameters('eventhubs_1_Connection_Name'))]"
       ]
     },
     {
@@ -306,6 +346,21 @@
         "parameterValues": {
           "integrationAccountId": "[parameters('x12_1_integrationAccountId')]",
           "integrationAccountUrl": "[listCallbackURL(parameters('x12_1_integrationAccountId'), '2015-08-01-preview').value]"
+        }
+      }
+    },
+    {
+      "type": "MICROSOFT.WEB/CONNECTIONS",
+      "apiVersion": "2018-07-01-preview",
+      "name": "[parameters('eventhubs_1_Connection_Name')]",
+      "location": "[parameters('logicAppLocation')]",
+      "properties": {
+        "api": {
+          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'eventhubs')]"
+        },
+        "displayName": "[parameters('eventhubs_1_Connection_DisplayName')]",
+        "parameterValues": {
+          "connectionString": "[parameters('eventhubs_1_connectionString')]"
         }
       }
     }
