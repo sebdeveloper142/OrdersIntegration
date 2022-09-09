@@ -1,7 +1,7 @@
 Hi!
 
 I have created an integration solution commonly occuring in live scenarios. The flow is exposed on both the inbound and outbound side through
-API Management. The message is lead through a logic app surrounded by service busses as displayed in the diagram below. Both the API Management, the Lopic App and the Service buses is deployable via Azure DevOps.
+API Management. The message is led through a logic app surrounded by service busses as displayed in the diagram below. Both the API Management, the Lopic App and the Service buses is deployable via Azure DevOps.
 
 ![image](https://user-images.githubusercontent.com/100699250/184429405-9b576c04-eb41-4359-a366-29083eace317.png)
 
